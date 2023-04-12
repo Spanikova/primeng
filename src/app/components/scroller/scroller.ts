@@ -730,24 +730,16 @@ export class Scroller implements OnInit, AfterContentInit, AfterViewChecked, OnD
             Promise.resolve().then(() => {
                 if (this.contentEl) {
                     this.contentEl.style.minHeight = this.contentEl.style.minWidth = 'auto';
-                    this.contentEl.style.position = 'relative';
-                    this.elementViewChild.nativeElement.style.contain = 'none';
 
-                    const [contentWidth, contentHeight] = [DomHandler.getWidth(this.contentEl), DomHandler.getHeight(this.contentEl)];
-                    contentWidth !== this.defaultContentWidth && (this.elementViewChild.nativeElement.style.width = '');
-                    contentHeight !== this.defaultContentHeight && (this.elementViewChild.nativeElement.style.height = '');
+                    const { offsetWidth, offsetHeight } = this.contentEl;
 
-                    const [width, height] = [DomHandler.getWidth(this.elementViewChild.nativeElement), DomHandler.getHeight(this.elementViewChild.nativeElement)];
-                    (this.both || this.horizontal) && (this.elementViewChild.nativeElement.style.width = width < this.defaultWidth ? width + 'px' : this._scrollWidth || this.defaultWidth + 'px');
-                    (this.both || this.vertical) && (this.elementViewChild.nativeElement.style.height = height < this.defaultHeight ? height + 'px' : this._scrollHeight || this.defaultHeight + 'px');
-
+                    (this.both || this.horizontal) && (this.elementViewChild.nativeElement.style.width = (offsetWidth < this.defaultWidth ? offsetWidth : this.defaultWidth) + 'px');
+                    (this.both || this.vertical) && (this.elementViewChild.nativeElement.style.height = (offsetHeight < this.defaultHeight ? offsetHeight : this.defaultHeight) + 'px');
                     this.contentEl.style.minHeight = this.contentEl.style.minWidth = '';
-                    this.contentEl.style.position = '';
-                    this.elementViewChild.nativeElement.style.contain = '';
                 }
             });
         }
-    }
+}
 
     getLast(last = 0, isCols = false) {
         return this._items ? Math.min(isCols ? (this._columns || this._items[0]).length : this._items.length, last) : 0;
